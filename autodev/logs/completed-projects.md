@@ -1,0 +1,4 @@
+- 2026-04-27: logtidy — Python automation script (private) — https://github.com/Kiloooai/logtidy
+- 2026-04-27: certwatch — SSL certificate monitoring & automation (private) — https://github.com/Kiloooai/certwatch
+- 2026-04-27: backupcheck — automated backup verification & integrity testing (private) — https://github.com/Kiloooai/backupcheck
+- 2026-04-27: whatif — Monte Carlo decision dashboard (public) — https://github.com/Kiloooai/whatif | Pages: https://kiloooai.github.io/whatif
