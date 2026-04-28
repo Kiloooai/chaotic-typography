@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Chaotic Typography Generator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0f;
+      color: #e0e0e0;
+      font-family: 'Courier New', monospace;
+      overflow-x: hidden;
+      padding: 20px;
+      min-height: 100vh;
+    }
+    h1 {
+      text-align: center;
+      margin: 20px 0 30px;
+      font-size: 2.5rem;
+      color: #ff3366;
+      text-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 14px;
+      background: #111;
+      border: 2px solid #333;
+      color: #0f0;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      border-radius: 6px;
+      resize: vertical;
+    }
+    textarea:focus {
+      outline: none;
+      border-color: #ff3366;
+      box-shadow: 0 0 15px rgba(255, 51, 102, 0.3);
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      padding: 18px;
+      background: #111;
+      border: 2px solid #333;
+      border-radius: 8px;
+    }
+    .control-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    label {
+      font-size: 12px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    input[type="range"] {
+      width: 100%;
+      accent-color: #ff3366;
+    }
+    .value-display {
+      font-size: 11px;
+      color: #ff3366;
+      text-align: right;
+    }
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    button {
+      padding: 12px 28px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      font-weight: bold;
+      border: 2px solid #ff3366;
+      background: #111;
+      color: #ff3366;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    button:hover {
+      background: #ff3366;
+      color: #000;
+      box-shadow: 0 0 20px rgba(255, 51, 102, 0.6);
+    }
+    button:active {
+      transform: scale(0.98);
+    }
+    .output-area {
+      min-height: 180px;
+      padding: 20px;
+      background: #111;
+      border: 2px solid #333;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+    #output {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      word-break: break-all;
+      line-height: 1.4;
+      white-space: pre-wrap;
+    }
+    .glitch-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.15;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 0, 100, 0.1) 2px,
+        rgba(255, 0, 100, 0.1) 4px
+      );
+      animation: scanline 0.3s linear infinite;
+    }
+    @keyframes scanline {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 100%; }
+    }
+    .instructions {
+      margin-top: 20px;
+      padding: 16px;
+      background: #111;
+      border: 1px dashed #333;
+      border-radius: 6px;
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="glitch-overlay"></div>
+  <div class="container">
+    <h1>⚠ CHAOTIC TYPOGRAPHY ⚠</h1>
+
+    <textarea id="input" placeholder="Type something... then make it chaotic!">CHAOS</textarea>
+
+    <div class="controls">
+      <div class="control-group">
+        <label>Spacing Anarchy</label>
+        <input type="range" id="spacing" min="-10" max="30" value="5">
+        <div class="value-display" id="spacing-val">5</div>
+      </div>
+
+      <div class="control-group">
+        <label>Rotation Madness</label>
+        <input type="range" id="rotation" min="-180" max="180" value="0">
+        <div class="value-display" id="rotation-val">0°</div>
+      </div>
+
+      <div class="control-group">
+        <label>Skew Frenzy</label>
+        <input type="range" id="skew" min="-60" max="60" value="0">
+        <div class="value-display" id="skew-val">0°</div>
+      </div>
+
+      <div class="control-group">
+        <label>Size Chaos</label>
+        <input type="range" id="sizeVar" min="0" max="150" value="20">
+        <div class="value-display" id="sizeVar-val">20%</div>
+      </div>
+
+      <div class="control-group">
+        <label>Color Insanity</label>
+        <input type="range" id="colorMode" min="0" max="4" value="0" step="1">
+        <div class="value-display" id="colorMode-val">Rainbow</div>
+      </div>
+
+      <div class="control-group">
+        <label>Glitch Intensity</label>
+        <input type="range" id="glitch" min="0" max="100" value="30">
+        <div class="value-display" id="glitch-val">30%</div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button id="chaos">🔥 CHAOS IT!</button>
+      <button id="mild">🌿 Mild Mode</button>
+      <button id="reset">↺ Reset</button>
+    </div>
+
+    <div class="output-area">
+      <div id="output">YOUR TEXT WILL APPEAR HERE</div>
+    </div>
+
+    <div class="instructions">
+      Adjust sliders → hit CHAOS IT → watch typography lose its mind.<br>
+      Each letter gets random spacing, rotation, skew, size jitter, color shifts, and glitch corruption.
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('input');
+    const output = document.getElementById('output');
+
+    // Control elements
+    const spacingSlider = document.getElementById('spacing');
+    const rotationSlider = document.getElementById('rotation');
+    const skewSlider = document.getElementById('skew');
+    const sizeVarSlider = document.getElementById('sizeVar');
+    const colorModeSlider = document.getElementById('colorMode');
+    const glitchSlider = document.getElementById('glitch');
+
+    // Value displays
+    const spacingVal = document.getElementById('spacing-val');
+    const rotationVal = document.getElementById('rotation-val');
+    const skewVal = document.getElementById('skew-val');
+    const sizeVarVal = document.getElementById('sizeVar-val');
+    const colorModeVal = document.getElementById('colorMode-val');
+    const glitchVal = document.getElementById('glitch-val');
+
+    // Color mode labels
+    const colorLabels = ['🌈 Rainbow', '🔥 Fire', '💀 Monochrome', '🌊 Ocean', '🐉 Acid'];
+
+    function updateDisplays() {
+      spacingVal.textContent = spacingSlider.value;
+      rotationVal.textContent = rotationSlider.value + '°';
+      skewVal.textContent = skewSlider.value + '°';
+      sizeVarVal.textContent = sizeVarSlider.value + '%';
+      colorModeVal.textContent = colorLabels[colorModeSlider.value];
+      glitchVal.textContent = glitchSlider.value + '%';
+    }
+
+    // Attach listeners
+    [spacingSlider, rotationSlider, skewSlider, sizeVarSlider, colorModeSlider, glitchSlider].forEach(slider => {
+      slider.addEventListener('input', updateDisplays);
+    });
+
+    // Color palette generators
+    function getRandomColor(mode) {
+      const modes = {
+        0: () => `hsl(${Math.random() * 360}, 90%, 60%)`,           // rainbow
+        1: () => `hsl(${10 + Math.random() * 50}, 90%, 55%)`,       // fire (oranges/reds)
+        2: () => {
+          const shade = Math.floor(Math.random() * 201) - 100;
+          return `hsl(0, 0%, ${50 + shade}%)`;                       // monochrome
+        },
+        3: () => `hsl(${180 + Math.random() * 60}, 85%, 50%)`,      // ocean (blues/cyans)
+        4: () => `hsl(${80 + Math.random() * 100}, 100%, 50%)`      // acid (greens/yellows)
+      };
+      return modes[mode]();
+    }
+
+    // Glitch character corruptions
+    const glitchChars = '▓▒░█▀▄▌▐│┤╡╢╖╕╣║╗╝╜╛┐└┴┬├─┼╞╟╚╔╩╦╠═╬╧╨╤╥╙╘╒╓╫╪┘┌';
+    function corruptChar(char, intensity) {
+      if (Math.random() * 100 < intensity) {
+        // Replace with glitch char
+        return glitchChars[Math.floor(Math.random() * glitchChars.length)];
+      }
+      // Slight chance to duplicate or delete
+      if (Math.random() * 100 < intensity * 0.3) {
+        return char + char;
+      }
+      if (Math.random() * 100 < intensity * 0.2) {
+        return '';
+      }
+      return char;
+    }
+
+    function applyChaos() {
+      const text = input.value || 'CHAOS';
+      const spacingBase = parseInt(spacingSlider.value);
+      const rotationBase = parseInt(rotationSlider.value);
+      const skewBase = parseInt(skewSlider.value);
+      const sizeVar = parseInt(sizeVarSlider.value);
+      const colorMode = parseInt(colorModeSlider.value);
+      const glitchIntensity = parseInt(glitchSlider.value);
+
+      output.innerHTML = '';
+
+      [...text].forEach((char, i) => {
+        const span = document.createElement('span');
+        const corrupted = corruptChar(char, glitchIntensity);
+
+        // Random jitter values
+        const spacingJitter = Math.random() * spacingBase * 0.8 - spacingBase * 0.4;
+        const rotationJitter = Math.random() * 40 - 20;
+        const skewJitter = Math.random() * 30 - 15;
+        const sizeJitter = (Math.random() * sizeVar) - (sizeVar / 2);
+
+        span.textContent = corrupted;
+
+        // Chaos sample string loading
+        span.style.display = 'inline-block';
+        span.style.whiteSpace = 'pre';
+
+        // Base values + jitter
+        const spacing = spacingBase + spacingJitter;
+        const rotation = rotationBase + rotationJitter;
+        const skew = skewBase + skewJitter;
+        const size = 48 + sizeJitter;
+
+        span.style.margin = `0 ${spacing}px`;
+        span.style.transform = `rotate(${rotation}deg) skewX(${skew}deg)`;
+        span.style.fontSize = `${size}px`;
+        span.style.color = getRandomColor(colorMode);
+        span.style.textShadow = `
+          ${Math.random() * 10 - 5}px ${Math.random() * 10 - 5}px 0 rgba(0,0,0,0.8),
+          ${Math.random() * 10}px ${Math.random() * 10}px 8px ${getRandomColor(colorMode)}
+        `;
+        span.style.filter = glitchIntensity > 50 ? `drop-shadow(${Math.random()*4}px 0 ${Math.random()*2}px rgba(255,0,100,0.5))` : 'none';
+        span.style.transition = 'none';
+
+        output.appendChild(span);
+      });
+
+      // Add occasional glitch flicker to the whole output
+      if (glitchIntensity > 30) {
+        output.animate([
+          { opacity: 1 },
+          { opacity: 0.85 + Math.random() * 0.15 },
+          { opacity: 1 }
+        ], {
+          duration: 50 + Math.random() * 100,
+          iterations: 1
+        });
+      }
+    }
+
+    // Initial render
+    applyChaos();
+
+    // Button handlers
+    document.getElementById('chaos').addEventListener('click', () => {
+      // Randomize all sliders to maximum chaos
+      spacingSlider.value = 30;
+      rotationSlider.value = 30;
+      skewSlider.value = 30;
+      sizeVarSlider.value = 100;
+      colorModeSlider.value = Math.floor(Math.random() * 5);
+      glitchSlider.value = 80;
+      updateDisplays();
+      applyChaos();
+    });
+
+    document.getElementById('mild').addEventListener('click', () => {
+      spacingSlider.value = 4;
+      rotationSlider.value = 2;
+      skewSlider.value = 1;
+      sizeVarSlider.value = 10;
+      colorModeSlider.value = 0;
+      glitchSlider.value = 10;
+      updateDisplays();
+      applyChaos();
+    });
+
+    document.getElementById('reset').addEventListener('click', () => {
+      input.value = 'CHAOS';
+      spacingSlider.value = 5;
+      rotationSlider.value = 0;
+      skewSlider.value = 0;
+      sizeVarSlider.value = 20;
+      colorModeSlider.value = 0;
+      glitchSlider.value = 30;
+      updateDisplays();
+      applyChaos();
+    });
+
+    // Real-time update as you type (debounced)
+    let timeout;
+    input.addEventListener('input', () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(applyChaos, 100);
+    });
+  </script>
+</body>
+</html>
