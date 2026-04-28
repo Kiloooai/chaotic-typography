@@ -30,20 +30,23 @@ If it makes you smile when you open it, or you show it to a friend going "look a
 
 1. Pick something **unusual, fun, or visually engaging**
 2. Code it fully (no placeholders)
-3. Git + push (type-appropriate repo visibility)
+3. Git + push to a remote (type-appropriate repo visibility) — **MANDATORY**
 4. Log it, update rotation
-5. Reply with standard format
 
 ## Rotation
 
-Kept for bookkeeping:
-- Type 0: Python CLI → private
+Kept for bookkeeping (Type 0 Python builds are encouraged too — don't HTML-only):
+- Type 0: Python CLI / tiny tool → private
 - Type 1: SaaS landing → SKIP
 - Type 2: Python automation → private
-- Type 3: Dashboard / web app → public + Pages
+- Type 3: Dashboard / web app / browser toy → public + Pages
 
-But now Type 3 = interactive fun thing (not business dashboard).
+Type 3 now means "interactive fun" (not business dashboards).
 
 ## Golden Rule
 
 **Fun first.** If you're not slightly amused by the end result, pick a different idea.
+Build logged: neon-bouncers (Type 3 interactive toy) - 2026-04-27 18:01
+Build logged: typing-roaster (Type 3 interactive HTML/JS roast toy) - 2026-04-27 23:00 (status: pushed to https://github.com/Kiloooai/typing-roaster)
+Build logged: meme-generator (Type 3 interactive browser toy - meme studio with draggable text, styling, download) - 2026-04-28 00:30 (status: pushed to https://github.com/Kiloooai/meme-generator)
+Build logged: glitchpaint (Type 3 interactive drawing app with real-time glitch effects) - 2026-04-28 02:00 (status: pushed to https://github.com/Kiloooai/glitchpaint)
