@@ -49,4 +49,4 @@ Type 3 now means "interactive fun" (not business dashboards).
 Build logged: neon-bouncers (Type 3 interactive toy) - 2026-04-27 18:01
 Build logged: typing-roaster (Type 3 interactive HTML/JS roast toy) - 2026-04-27 23:00 (status: pushed to https://github.com/Kiloooai/typing-roaster)
 Build logged: meme-generator (Type 3 interactive browser toy - meme studio with draggable text, styling, download) - 2026-04-28 00:30 (status: pushed to https://github.com/Kiloooai/meme-generator)
-Build logged: glitchpaint (Type 3 interactive drawing app with real-time glitch effects) - 2026-04-28 02:00 (status: pushed to https://github.com/Kiloooai/glitchpaint)
+Build logged: chaotic-typography (Type 3 interactive browser toy - wild letter-spacing/rotation/skew/size/color/glitch chaos generator) - 2026-04-28 06:30 (status: pushed to https://github.com/Kiloooai/chaotic-typography)
