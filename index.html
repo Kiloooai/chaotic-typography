@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chaotic Typography</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+            min-height: 100vh;
+            font-family: 'Arial Black', 'Impact', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            border: 2px solid #f0f;
+            z-index: 1000;
+            max-width: 320px;
+            backdrop-filter: blur(10px);
+            user-select: none;
+        }
+
+        .controls h1 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #f0f;
+            text-shadow: 0 0 15px #f0f;
+            letter-spacing: 2px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            color: #ff0;
+            letter-spacing: 1px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #f0f;
+        }
+
+        textarea {
+            width: 100%;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid #0ff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: #f0f;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #f0f, #0ff);
+            border: none;
+            border-radius: 25px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.2s;
+            margin-top: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.6);
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid #0ff;
+            color: #0ff;
+            margin-top: 8px;
+        }
+
+        .secondary-btn:hover {
+            background: rgba(0, 255, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .value-display {
+            float: right;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        #chaos-canvas {
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="chaos-canvas"></canvas>
+    <canvas id="text-canvas"></canvas>
+
+    <div class="controls">
+        <h1>CHAOTIC TYPOGRAPHY</h1>
+
+        <div class="control-group">
+            <label>Text to Chaotify</label>
+            <textarea id="inputText" placeholder="Type something...">CHAOS</textarea>
+        </div>
+
+        <div class="control-group">
+            <label>Letter Spacing <span class="value-display" id="spacingVal">50</span>px</label>
+            <input type="range" id="spacing" min="0" max="150" value="50">
+        </div>
+
+        <div class="control-group">
+            <label>Rotation <span class="value-display" id="rotationVal">180</span>°</label>
+            <input type="range" id="rotation" min="0" max="360" value="180">
+        </div>
+
+        <div class="control-group">
+            <label>Skew <span class="value-display" id="skewVal">20</span>°</label>
+            <input type="range" id="skew" min="-45" max="45" value="20">
+        </div>
+
+        <div class="control-group">
+            <label>Size Min/Max <span class="value-display" id="sizeVal">20-100</span>px</label>
+            <input type="range" id="sizeMin" min="8" max="80" value="20">
+            <input type="range" id="sizeMax" min="80" max="200" value="100" style="margin-top: 5px;">
+        </div>
+
+        <div class="control-group">
+            <label>Color Chaos <span class="value-display" id="colorVal">ON</span></label>
+            <input type="range" id="colorMode" min="0" max="2" value="1" step="1">
+            <small style="color: #888; font-size: 10px;">0=Fixed, 1=Random, 2=Rainbow</small>
+        </div>
+
+        <div class="control-group">
+            <label>Glitch Intensity <span class="value-display" id="glitchVal">5</span></label>
+            <input type="range" id="glitch" min="0" max="20" value="5">
+        </div>
+
+        <div class="control-group">
+            <label>Fade <span class="value-display" id="fadeVal">0.95</span></label>
+            <input type="range" id="fade" min="0.8" max="0.99" value="0.95" step="0.01">
+        </div>
+
+        <button id="generateBtn">GENERATE CHAOS</button>
+        <button id="clearBtn" class="secondary-btn">Clear Canvas</button>
+        <button id="randomBtn" class="secondary-btn">Randomize All</button>
+    </div>
+
+    <script>
+        const textCanvas = document.getElementById('text-canvas');
+        const chaosCanvas = document.getElementById('chaos-canvas');
+        const tCtx = textCanvas.getContext('2d');
+        const cCtx = chaosCanvas.getContext('2d');
+
+        const inputText = document.getElementById('inputText');
+        const spacingSlider = document.getElementById('spacing');
+        const rotationSlider = document.getElementById('rotation');
+        const skewSlider = document.getElementById('skew');
+        const sizeMinSlider = document.getElementById('sizeMin');
+        const sizeMaxSlider = document.getElementById('sizeMax');
+        const colorModeSlider = document.getElementById('colorMode');
+        const glitchSlider = document.getElementById('glitch');
+        const fadeSlider = document.getElementById('fade');
+        const generateBtn = document.getElementById('generateBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const randomBtn = document.getElementById('randomBtn');
+
+        let particles = [];
+        let autoChaos = false;
+        let glitchOffset = 0;
+
+        function resize() {
+            chaosCanvas.width = window.innerWidth;
+            chaosCanvas.height = window.innerHeight;
+            textCanvas.width = window.innerWidth;
+            textCanvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function randomColor() {
+            const colors = [
+                '#ff00ff', '#00ffff', '#ffff00', '#ff8800',
+                '#00ff00', '#ff0000', '#8800ff', '#00ff88'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function hsl(h, s, l) {
+            return `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        class GlitchParticle {
+            constructor(x, y, text, size, rotation, color) {
+                this.x = x;
+                this.y = y;
+                this.text = text;
+                this.size = size;
+                this.rotation = rotation * Math.PI / 180;
+                this.color = color;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = (Math.random() - 0.5) * 2;
+                this.life = 1;
+                this.decay = random(0.005, 0.02);
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life -= this.decay;
+            }
+
+            draw(ctx) {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                ctx.scale(this.size / 30, this.size / 30);
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.life;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+                ctx.fillText(this.text, 0, 0);
+                ctx.restore();
+            }
+
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+
+        function createExplosion(x, y, char, size, color) {
+            const count = 8;
+            for (let i = 0; i < count; i++) {
+                particles.push(new GlitchParticle(x, y, char, size, random(-45, 45), color));
+            }
+        }
+
+        function drawChaoticText() {
+            const text = inputText.value || 'CHAOS';
+            const spacing = parseInt(spacingSlider.value);
+            const baseRotation = parseInt(rotationSlider.value);
+            const baseSkew = parseInt(skewSlider.value);
+            const sizeMin = parseInt(sizeMinSlider.value);
+            const sizeMax = parseInt(sizeMaxSlider.value);
+            const colorMode = parseInt(colorModeSlider.value);
+            const glitchIntensity = parseInt(glitchSlider.value);
+
+            // Clear with fade effect
+            cCtx.fillStyle = `rgba(10, 10, 10, ${1 - parseFloat(fadeSlider.value)})`;
+            cCtx.fillRect(0, 0, chaosCanvas.width, chaosCanvas.height);
+
+            tCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+
+            const chars = text.split('');
+            const totalWidth = chars.length * spacing;
+            let startX = (textCanvas.width - totalWidth) / 2;
+            let startY = textCanvas.height / 2;
+
+            // Draw each character with chaos
+            for (let i = 0; i < chars.length; i++) {
+                const char = chars[i];
+                const size = random(sizeMin, sizeMax);
+                const rotation = random(baseRotation - glitchIntensity * 10, baseRotation + glitchIntensity * 10);
+                const skew = random(baseSkew - glitchIntensity * 5, baseSkew + glitchIntensity * 5);
+
+                let color;
+                if (colorMode === 0) {
+                    color = '#ff00ff';
+                } else if (colorMode === 1) {
+                    color = randomColor();
+                } else {
+                    color = hsl((Date.now() / 20 + i * 20) % 360, 100, 60);
+                }
+
+                // Calculate position
+                const x = startX + i * spacing + random(-glitchIntensity * 2, glitchIntensity * 2);
+                const y = startY + random(-glitchIntensity * 3, glitchIntensity * 3);
+
+                // Draw character to canvas
+                tCtx.save();
+                tCtx.translate(x, y);
+                tCtx.rotate(rotation * Math.PI / 180);
+                tCtx.transform(1, skew * 0.02, skew * 0.02, 1, 0, 0);
+                tCtx.font = `bold ${size}px Arial Black, Impact, sans-serif`;
+                tCtx.fillStyle = color;
+                tCtx.textAlign = 'center';
+                tCtx.textBaseline = 'middle';
+                tCtx.shadowBlur = 15;
+                tCtx.shadowColor = color;
+                tCtx.fillText(char, 0, 0);
+                tCtx.restore();
+
+                // Occasionally spawn glitch particles
+                if (glitchIntensity > 0 && Math.random() < glitchIntensity / 20) {
+                    createExplosion(x, y, char, size, color);
+                }
+            }
+
+            // Apply glitch offset effect
+            if (glitchIntensity > 0 && Math.random() < 0.3) {
+                glitchOffset = random(-glitchIntensity, glitchIntensity);
+            } else {
+                glitchOffset *= 0.9;
+            }
+
+            // Apply offset to chaos canvas via transformation
+            cCtx.save();
+            cCtx.translate(glitchOffset, 0);
+            cCtx.drawImage(textCanvas, 0, 0);
+            cCtx.restore();
+
+            // Update and draw glitch particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw(cCtx);
+                if (particles[i].isDead()) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        function animate() {
+            drawChaoticText();
+            requestAnimationFrame(animate);
+        }
+
+        // Update value displays
+        function updateDisplays() {
+            document.getElementById('spacingVal').textContent = spacingSlider.value;
+            document.getElementById('rotationVal').textContent = rotationSlider.value;
+            document.getElementById('skewVal').textContent = skewSlider.value;
+            document.getElementById('sizeVal').textContent = `${sizeMinSlider.value}-${sizeMaxSlider.value}`;
+            const colorModes = ['Fixed', 'Random', 'Rainbow'];
+            document.getElementById('colorVal').textContent = colorModes[colorModeSlider.value];
+            document.getElementById('glitchVal').textContent = glitchSlider.value;
+            document.getElementById('fadeVal').textContent = fadeSlider.value;
+        }
+
+        // Attach listeners
+        [spacingSlider, rotationSlider, skewSlider, sizeMinSlider, sizeMaxSlider, colorModeSlider, glitchSlider, fadeSlider].forEach(slider => {
+            slider.addEventListener('input', updateDisplays);
+        });
+
+        generateBtn.addEventListener('click', () => {
+            // Add animation burst
+            generateBtn.classList.add('pulse');
+            setTimeout(() => generateBtn.classList.remove('pulse'), 200);
+        });
+
+        clearBtn.addEventListener('click', () => {
+            particles = [];
+            cCtx.fillStyle = 'rgb(10, 10, 10)';
+            cCtx.fillRect(0, 0, chaosCanvas.width, chaosCanvas.height);
+            tCtx.clearRect(0, 0, textCanvas.width, textCanvas.height);
+        });
+
+        randomBtn.addEventListener('click', () => {
+            spacingSlider.value = random(30, 100);
+            rotationSlider.value = Math.floor(random(0, 360));
+            skewSlider.value = Math.floor(random(-30, 30));
+            sizeMinSlider.value = Math.floor(random(10, 50));
+            sizeMaxSlider.value = Math.floor(random(60, 150));
+            colorModeSlider.value = Math.floor(random(0, 3));
+            glitchSlider.value = Math.floor(random(0, 15));
+            updateDisplays();
+        });
+
+        // Mouse interaction: click to add glitch burst
+        chaosCanvas.addEventListener('click', (e) => {
+            const intensity = parseInt(glitchSlider.value);
+            for (let i = 0; i < intensity * 2; i++) {
+                setTimeout(() => {
+                    const char = inputText.value[Math.floor(Math.random() * inputText.value.length)] || 'X';
+                    createExplosion(e.clientX, e.clientY, char, random(20, 80), randomColor());
+                }, i * 20);
+            }
+        });
+
+        // Auto mode toggle on space
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                autoChaos = !autoChaos;
+                if (autoChaos) {
+                    randomBtn.click();
+                }
+            }
+        });
+
+        updateDisplays();
+        animate();
+    </script>
+</body>
+</html>
